@@ -24,7 +24,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "homepage": "https://genredetector.com/genre-detector-frontend",
   "eslintConfig": {
     "extends": [
       "react-app",
