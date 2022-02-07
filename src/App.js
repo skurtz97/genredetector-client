@@ -30,11 +30,9 @@ function App() {
 
   const handleQueryChange = (event) => {
     setSearchInput({ query: event.target.value, type: searchInput.type });
-    console.log(searchInput);
   };
   const handleTypeChange = (event) => {
     setSearchInput({ query: searchInput.query, type: event.target.value });
-    console.log(searchInput);
   };
   const handleSubmit = async (event) => {
     event.preventDefault(); // Stop default reloading behavior.
