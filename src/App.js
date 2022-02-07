@@ -45,7 +45,7 @@ function App() {
       const query_str = qs.stringify({ genre: searchInput.query });
       try {
         const results = await axios.get(
-          `http://localhost:5000/genres?${query_str}`
+          `https://genre-detector-backend-340610.uc.r.appspot.com/genres?${query_str}`
         );
         if (results.data.status === 200) {
           setSearchResults(results.data.msg);
@@ -61,7 +61,7 @@ function App() {
       const query_str = qs.stringify({ name: searchInput.query });
       try {
         const results = await axios.get(
-          `http://localhost:5000/artists?${query_str}`
+          `https://genre-detector-backend-340610.uc.r.appspot.com/artists?${query_str}`
         );
         if (results.data.status === 200) {
           setSearchResults(results.data.msg);
