@@ -30,6 +30,7 @@
       "react-app/jest"
     ]
   },
+  "homepage": "/genre-detector-frontend",
   "browserslist": {
     "production": [
       ">0.2%",
