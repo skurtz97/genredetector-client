@@ -7,6 +7,7 @@ export default function ResultsTable({ items }) {
         <Tr>
           <Th>Name</Th>
           <Th>Popularity</Th>
+          <Th>Followers</Th>
           <Th>Genres</Th>
         </Tr>
       </Thead>
@@ -16,6 +17,7 @@ export default function ResultsTable({ items }) {
             <Tr key={item.uri}>
               <Td>{item.name}</Td>
               <Td isNumeric>{item.popularity}</Td>
+              <Td isNumber>{item.followers.total}</Td>
               <Td>{item.genres.join(", ")}</Td>
             </Tr>
           );

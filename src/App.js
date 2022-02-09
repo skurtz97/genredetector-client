@@ -88,6 +88,7 @@ function App() {
             <Tr>
               <Th>Name</Th>
               <Th>Popularity</Th>
+              <Th>Followers</Th>
               <Th>Genres</Th>
             </Tr>
           </Thead>
