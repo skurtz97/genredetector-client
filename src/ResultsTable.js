@@ -6,8 +6,8 @@ export default function ResultsTable({ items }) {
       <Thead>
         <Tr>
           <Th>Name</Th>
-          <Th>Popularity</Th>
-          <Th>Followers</Th>
+          <Th isNumeric>Popularity</Th>
+          <Th isNumeric>Followers</Th>
           <Th>Genres</Th>
         </Tr>
       </Thead>
