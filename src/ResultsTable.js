@@ -17,7 +17,7 @@ export default function ResultsTable({ items }) {
             <Tr key={item.uri}>
               <Td>{item.name}</Td>
               <Td isNumeric>{item.popularity}</Td>
-              <Td isNumeric>{item.followers.total}</Td>
+              <Td isNumeric>{item.followers.total.toLocaleString()}</Td>
               <Td>{item.genres.join(", ")}</Td>
             </Tr>
           );
