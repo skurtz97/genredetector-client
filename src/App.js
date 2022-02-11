@@ -12,22 +12,27 @@ import {
 } from "@chakra-ui/react";
 import { DownloadIcon } from "@chakra-ui/icons";
 import { useState } from "react";
-import { ResultsTable } from "./ResultsTable";
+import { ArtistTable } from "./ArtistTable";
 
 import qs from "qs";
 import axios from "axios";
 
 import "./App.css";
+import { TrackTable } from "./TrackTable";
 
 function App() {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("genre");
+  const [displayType, setDisplayType] = useState("genre");
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
   const handleChange = (event) => {
     if (event.target.type === "select-one") {
       setType(event.target.value);
+      if (searchResults.length === 0) {
+        setDisplayType(event.target.value);
+      }
     } else if (event.target.type === "text") {
       setQuery(event.target.value);
     }
@@ -35,39 +40,28 @@ function App() {
 
   const handleSubmit = async (event) => {
     event.preventDefault(); // Stop default reloading behavior.
-    console.log("Sending request...");
     setLoading(true);
 
-    if (type === "genre") {
-      const query_str = qs.stringify({ genre: query });
-      try {
-        const results = await axios.get(
-          `https://api.genredetector.com/genres?${query_str}`
-        );
-        if (results.data.status === 200) {
-          setSearchResults(results.data.msg);
-          setLoading(false);
-          console.log(results.data.msg);
-        }
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
+    try {
+      let query_str = "";
+      let results = [];
+      if (type === "genre") {
+        query_str = qs.stringify({ genre: query });
+        results = await axios.get(`http://localhost:8080/genre?${query_str}`); // https://api.genredetector.com/genre?${query_str}
+      } else if (type === "artist") {
+        query_str = qs.stringify({ name: query });
+        results = await axios.get(`http://localhost:8080/artist?${query_str}`); // https://api.genredetector.com/artist?${query_str}
+      } else if (type === "track") {
+        query_str = qs.stringify({ name: query });
+        results = await axios.get(`http://localhost:8080/track?${query_str}`); // https://api.genredetector.com/track?${query_str}
       }
-    } else if (type === "artist") {
-      const query_str = qs.stringify({ name: query });
-      try {
-        const results = await axios.get(
-          `https://api.genredetector.com/artists?${query_str}`
-        );
-        if (results.data.status === 200) {
-          setSearchResults(results.data.msg);
-          setLoading(false);
-          console.log(results.data.msg);
-        }
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
+
+      setDisplayType(type);
+      setSearchResults(results.data);
+      console.log(results.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(`Error: ${error}`);
     }
   };
 
@@ -75,36 +69,22 @@ function App() {
     <div className="App">
       <Flex direction="column">
         <Stack direction="column" spacing={12} w="80%" margin="0 auto">
-          <Heading
-            as="h1"
-            size="3xl"
-            textAlign="left"
-            textTransform="uppercase"
-            letterSpacing={4}
-          >
+          <Heading as="h1" size="3xl" textAlign="left" textTransform="uppercase" letterSpacing={4}>
             Genre Detector
           </Heading>
 
           <form onSubmit={handleSubmit}>
             <Flex direction="row">
-              <Select
-                variant="filled"
-                width="11rem"
-                mr={2}
-                onChange={handleChange}
-              >
+              <Select variant="filled" width="11rem" mr={2} onChange={handleChange}>
                 <option value="genre">Genre</option>
                 <option value="artist">Artist</option>
+                <option value="track">Track</option>
               </Select>
 
               <InputGroup size="md">
                 <Input
                   type="text"
-                  placeholder={
-                    type === "genre"
-                      ? "Enter a genre to search for"
-                      : "Enter an artist to search for"
-                  }
+                  placeholder={`Enter ${type === "artist" ? "an artist" : `a ${type}`} to search for`}
                   value={query}
                   onChange={handleChange}
                   alignItems="flex-start"
@@ -116,19 +96,18 @@ function App() {
                       Search
                     </Button>
                     <Tooltip label="Download as CSV">
-                      <IconButton
-                        size="sm"
-                        type="button"
-                        colorScheme={"gray"}
-                        icon={<DownloadIcon />}
-                      />
+                      <IconButton size="sm" type="button" colorScheme={"gray"} icon={<DownloadIcon />} />
                     </Tooltip>
                   </Stack>
                 </InputRightElement>
               </InputGroup>
             </Flex>
           </form>
-          <ResultsTable items={searchResults} loading={loading} />
+          {displayType === "track" ? (
+            <TrackTable items={searchResults} loading={loading} />
+          ) : (
+            <ArtistTable items={searchResults} loading={loading} />
+          )}
         </Stack>
       </Flex>
     </div>
