@@ -22,8 +22,8 @@ import "./App.css";
 function App() {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("genre");
-  const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
 
   const handleChange = (event) => {
     if (event.target.type === "select-one") {
