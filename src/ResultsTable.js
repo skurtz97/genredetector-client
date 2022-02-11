@@ -9,13 +9,10 @@ import {
   Link,
   Center,
   Spinner,
-  background,
+  TableCaption,
 } from "@chakra-ui/react";
 
 export function ResultsTable({ items, loading }) {
-  const [counter, setCounter] = useState(0);
-  const incrementCounter = () => setCounter(counter + 1);
-
   if (loading) {
     return (
       <Center>
@@ -27,13 +24,14 @@ export function ResultsTable({ items, loading }) {
       <Table>
         <Thead>
           <Tr>
-            <Th>Position</Th>
             <Th>Name</Th>
-            <Th>Popularity</Th>
-            <Th>Followers</Th>
+            <Th isNumeric>Position</Th>
+            <Th isNumeric>Popularity</Th>
+            <Th isNumeric>Followers</Th>
             <Th>Genres</Th>
           </Tr>
         </Thead>
+        <TableCaption>No results</TableCaption>
       </Table>
     );
   } else {
@@ -51,7 +49,7 @@ export function ResultsTable({ items, loading }) {
         <Tbody>
           {items.map((item, index) => {
             return (
-              <Tr key={index}>
+              <Tr key={item.uri}>
                 <Td>
                   <Link href={item.url} _hover={{ color: "green.400" }}>
                     {item.name}

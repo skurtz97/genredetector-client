@@ -1,8 +1,9 @@
 import {
-  Text,
   Heading,
   Button,
   Input,
+  InputGroup,
+  InputRightElement,
   Flex,
   Select,
   Stack,
@@ -26,10 +27,8 @@ function App() {
 
   const handleChange = (event) => {
     if (event.target.type === "select-one") {
-      console.log(`Changing search type to ${event.target.value}`);
       setType(event.target.value);
     } else if (event.target.type === "text") {
-      console.log(`Changing search query to ${event.target.value}`);
       setQuery(event.target.value);
     }
   };
@@ -74,17 +73,16 @@ function App() {
 
   return (
     <div className="App">
-      <Flex direction="column" mt={4}>
-        <Stack direction="column" spacing="2rem" w="80%" margin="0 auto">
+      <Flex direction="column">
+        <Stack direction="column" spacing={12} w="80%" margin="0 auto">
           <Heading
             as="h1"
-            size="4xl"
+            size="3xl"
             textAlign="left"
             textTransform="uppercase"
-            textShadow="md"
             letterSpacing={4}
           >
-            GENRE DETECTOR
+            Genre Detector
           </Heading>
 
           <form onSubmit={handleSubmit}>
@@ -99,39 +97,35 @@ function App() {
                 <option value="artist">Artist</option>
               </Select>
 
-              <Input
-                type="text"
-                placeholder={
-                  type === "genre"
-                    ? "Enter a genre to search for"
-                    : "Enter an artist to search for"
-                }
-                value={query}
-                onChange={handleChange}
-                alignItems="flex-start"
-              ></Input>
-            </Flex>
-
-            <Flex
-              flexDirection="row"
-              justifyContent="center"
-              alignItems="center"
-              width="40%"
-              margin="0 auto"
-              mt={2}
-            >
-              <Button type="submit" colorScheme={"green"} width="16rem" mr={2}>
-                Search
-              </Button>
-              <Tooltip label="Download as CSV">
-                <IconButton
-                  type="button"
-                  colorScheme={"gray"}
-                  aria-label="Download as CSV"
-                  width="4rem"
-                  icon={<DownloadIcon />}
+              <InputGroup size="md">
+                <Input
+                  type="text"
+                  placeholder={
+                    type === "genre"
+                      ? "Enter a genre to search for"
+                      : "Enter an artist to search for"
+                  }
+                  value={query}
+                  onChange={handleChange}
+                  alignItems="flex-start"
+                  pr="8rem"
                 />
-              </Tooltip>
+                <InputRightElement width="7rem">
+                  <Stack width="100%" direction="row">
+                    <Button type="submit" colorScheme={"green"} size="sm">
+                      Search
+                    </Button>
+                    <Tooltip label="Download as CSV">
+                      <IconButton
+                        size="sm"
+                        type="button"
+                        colorScheme={"gray"}
+                        icon={<DownloadIcon />}
+                      />
+                    </Tooltip>
+                  </Stack>
+                </InputRightElement>
+              </InputGroup>
             </Flex>
           </form>
           <ResultsTable items={searchResults} loading={loading} />
