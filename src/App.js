@@ -6,41 +6,41 @@ import {
   Flex,
   Select,
   Stack,
-  Spinner,
-  Center,
-  Table,
-  Thead,
-  Tr,
-  Th,
   IconButton,
   Tooltip,
 } from "@chakra-ui/react";
 import { DownloadIcon } from "@chakra-ui/icons";
 import { useState } from "react";
+import { ResultsTable } from "./ResultsTable";
+
 import qs from "qs";
 import axios from "axios";
-import ResultsTable from "./ResultsTable";
+
 import "./App.css";
 
 function App() {
-  const [searchInput, setSearchInput] = useState({ query: "", type: "artist" });
+  const [query, setQuery] = useState("");
+  const [type, setType] = useState("genre");
   const [searchResults, setSearchResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
-  const handleQueryChange = (event) => {
-    setSearchInput({ query: event.target.value, type: searchInput.type });
+  const handleChange = (event) => {
+    if (event.target.type === "select-one") {
+      console.log(`Changing search type to ${event.target.value}`);
+      setType(event.target.value);
+    } else if (event.target.type === "text") {
+      console.log(`Changing search query to ${event.target.value}`);
+      setQuery(event.target.value);
+    }
   };
-  const handleTypeChange = (event) => {
-    setSearchInput({ query: searchInput.query, type: event.target.value });
-  };
+
   const handleSubmit = async (event) => {
     event.preventDefault(); // Stop default reloading behavior.
     console.log("Sending request...");
     setLoading(true);
 
-    if (searchInput.type === "genre") {
-      const query_str = qs.stringify({ genre: searchInput.query });
+    if (type === "genre") {
+      const query_str = qs.stringify({ genre: query });
       try {
         const results = await axios.get(
           `https://api.genredetector.com/genres?${query_str}`
@@ -52,11 +52,10 @@ function App() {
         }
       } catch (error) {
         console.log(error);
-        setError(true);
         setLoading(false);
       }
-    } else if (searchInput.type === "artist") {
-      const query_str = qs.stringify({ name: searchInput.query });
+    } else if (type === "artist") {
+      const query_str = qs.stringify({ name: query });
       try {
         const results = await axios.get(
           `https://api.genredetector.com/artists?${query_str}`
@@ -68,43 +67,11 @@ function App() {
         }
       } catch (error) {
         console.log(error);
-        setError(true);
         setLoading(false);
       }
     }
   };
 
-  const renderTable = () => {
-    if (loading) {
-      return (
-        <Center>
-          <Spinner size="xl" />
-        </Center>
-      );
-    } else if (!loading && searchResults.length === 0) {
-      return (
-        <Table>
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Popularity</Th>
-              <Th>Followers</Th>
-              <Th>Genres</Th>
-            </Tr>
-          </Thead>
-        </Table>
-      );
-    } else {
-      return (
-        <>
-          <Heading as="h2" size="lg" textAlign="center">
-            {searchResults.length} artists found
-          </Heading>
-          <ResultsTable items={searchResults} />
-        </>
-      );
-    }
-  };
   return (
     <div className="App">
       <Flex direction="column" mt={4}>
@@ -126,21 +93,21 @@ function App() {
                 variant="filled"
                 width="11rem"
                 mr={2}
-                onChange={handleTypeChange}
+                onChange={handleChange}
               >
-                <option value="artist">Artist</option>
                 <option value="genre">Genre</option>
+                <option value="artist">Artist</option>
               </Select>
 
               <Input
                 type="text"
                 placeholder={
-                  searchInput.type === "artist"
-                    ? "Enter an artist name to search for"
-                    : "Enter a genre to search for"
+                  type === "genre"
+                    ? "Enter a genre to search for"
+                    : "Enter an artist to search for"
                 }
-                value={searchInput.query}
-                onChange={handleQueryChange}
+                value={query}
+                onChange={handleChange}
                 alignItems="flex-start"
               ></Input>
             </Flex>
@@ -167,8 +134,7 @@ function App() {
               </Tooltip>
             </Flex>
           </form>
-
-          {renderTable()}
+          <ResultsTable items={searchResults} loading={loading} />
         </Stack>
       </Flex>
     </div>
