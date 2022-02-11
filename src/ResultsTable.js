@@ -9,6 +9,7 @@ import {
   Link,
   Center,
   Spinner,
+  background,
 } from "@chakra-ui/react";
 
 export function ResultsTable({ items, loading }) {
@@ -41,7 +42,7 @@ export function ResultsTable({ items, loading }) {
         <Thead>
           <Tr>
             <Th>Name</Th>
-            <Th>Position</Th>
+            <Th isNumeric>Position</Th>
             <Th isNumeric>Popularity</Th>
             <Th isNumeric>Followers</Th>
             <Th>Genres</Th>
@@ -52,7 +53,9 @@ export function ResultsTable({ items, loading }) {
             return (
               <Tr key={index}>
                 <Td>
-                  <Link href={item.url}>{item.name}</Link>
+                  <Link href={item.url} _hover={{ color: "green.400" }}>
+                    {item.name}
+                  </Link>
                 </Td>
                 <Td isNumeric>{index + 1}</Td>
                 <Td isNumeric>{item.popularity}</Td>
