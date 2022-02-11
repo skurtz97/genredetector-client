@@ -47,13 +47,13 @@ function App() {
       let results = [];
       if (type === "genre") {
         query_str = qs.stringify({ genre: query });
-        results = await axios.get(`http://localhost:8080/genre?${query_str}`); // https://api.genredetector.com/genre?${query_str}
+        results = await axios.get(`https://api.genredetector.com/genre?${query_str}`);
       } else if (type === "artist") {
         query_str = qs.stringify({ name: query });
-        results = await axios.get(`http://localhost:8080/artist?${query_str}`); // https://api.genredetector.com/artist?${query_str}
+        results = await axios.get(`https://api.genredetector.com/artist?${query_str}`);
       } else if (type === "track") {
         query_str = qs.stringify({ name: query });
-        results = await axios.get(`http://localhost:8080/track?${query_str}`); // https://api.genredetector.com/track?${query_str}
+        results = await axios.get(`https://api.genredetector.com/track?${query_str}`);
       }
 
       setDisplayType(type);
