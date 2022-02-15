@@ -70,11 +70,11 @@ function App() {
       if (type === "genre") {
         console.log("GENRE");
         query_str = qs.stringify({ genre: query });
-        results = await axios.get(`http://localhost:8080/genre?${query_str}`);
+        results = await axios.get(`https://api.genredetector.com/genre?${query_str}`);
         console.log(results.data);
       } else if (type === "artist") {
         query_str = qs.stringify({ name: query });
-        results = await axios.get(`http://localhost:8080/artists?${query_str}`);
+        results = await axios.get(`https://api.genredetector.com/artists?${query_str}`);
         console.log(results.data);
       } else if (type === "artist_id") {
         const index = query.lastIndexOf(":");
@@ -83,10 +83,10 @@ function App() {
         } else {
           id = query;
         }
-        results = await axios.get(`http://localhost:8080/artist/${id}`);
+        results = await axios.get(`https://api.genredetector.com/artist/${id}`);
       } else if (type === "track") {
         query_str = qs.stringify({ name: query });
-        results = await axios.get(`http://localhost:8080/tracks?${query_str}`);
+        results = await axios.get(`https://api.genredetector.com/tracks?${query_str}`);
         console.log(results.data);
       } else if (type === "track_id") {
         const index = query.lastIndexOf(":");
@@ -95,7 +95,7 @@ function App() {
         } else {
           id = query;
         }
-        results = await axios.get(`http://localhost:8080/track/${id}`);
+        results = await axios.get(`https://api.genredetector.com/track/${id}`);
       }
       setDisplayType(type);
       setSearchResults(results.data);
