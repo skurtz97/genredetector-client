@@ -42,7 +42,7 @@ export function TrackTable({ items, loading }) {
                   </Link>
                 </Td>
                 <Td>{item.album}</Td>
-                <Td>{item.artists.map((artist) => artist.name).join(", ")}</Td>
+                <Td>{item.artists}</Td>
                 <Td isNumeric>{item.popularity}</Td>
               </Tr>
             );
