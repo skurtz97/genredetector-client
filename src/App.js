@@ -73,28 +73,39 @@ function App() {
         results = await axios.get(`https://api.genredetector.com/genre?${query_str}`);
         console.log(results.data);
       } else if (type === "artist") {
+        console.log("ARTIST");
         query_str = qs.stringify({ name: query });
         results = await axios.get(`https://api.genredetector.com/artists?${query_str}`);
         console.log(results.data);
       } else if (type === "artist_id") {
-        const index = query.lastIndexOf(":");
-        if (index !== -1) {
-          id = query.substring(query.lastIndexOf(":") + 1); // get rest of string starting from last occurrence of :
+        console.log(query);
+        if (query.includes("https://open.spotify.com/artist/")) {
+          id = query.replace("https://open.spotify.com/artist/", "");
+        } else if (query.indexOf(":") !== -1) {
+          id = query.substring(query.lastIndexOf(":") + 1);
         } else {
           id = query;
         }
+
         results = await axios.get(`https://api.genredetector.com/artist/${id}`);
       } else if (type === "track") {
+        console.log("TRACK");
         query_str = qs.stringify({ name: query });
         results = await axios.get(`https://api.genredetector.com/tracks?${query_str}`);
         console.log(results.data);
       } else if (type === "track_id") {
+        console.log("TRACK ID");
+        if (query.includes("https://open.spotify.com/track/")) {
+          id = query.replace("https://open.spotify.com/track/", "");
+        }
         const index = query.lastIndexOf(":");
         if (index !== -1) {
           id = query.substring(query.lastIndexOf(":") + 1); // get rest of string starting from last occurrence of :
         } else {
           id = query;
         }
+
+        console.log(id);
         results = await axios.get(`https://api.genredetector.com/track/${id}`);
       }
       setDisplayType(type);
