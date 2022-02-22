@@ -1,24 +1,24 @@
+import { DownloadIcon } from "@chakra-ui/icons";
 import {
-  Heading,
   Button,
+  Flex,
+  Heading,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Flex,
   Select,
   Stack,
-  IconButton,
+  Text,
   Tooltip,
+  Link,
 } from "@chakra-ui/react";
-import { DownloadIcon } from "@chakra-ui/icons";
-import { useState, useRef } from "react";
-import { ArtistTable } from "./ArtistTable";
-import { CSVLink } from "react-csv";
-
-import qs from "qs";
 import axios from "axios";
-
+import qs from "qs";
+import { useRef, useState } from "react";
+import { CSVLink } from "react-csv";
 import "./App.css";
+import { ArtistTable } from "./ArtistTable";
 import { TrackTable } from "./TrackTable";
 
 function App() {
@@ -27,8 +27,6 @@ function App() {
   const [displayType, setDisplayType] = useState("genre");
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
-  const [tableData, setTableData] = useState([]);
-  const [tableHeaders, setTableHeaders] = useState([]);
   const csvLink = useRef();
 
   const handleChange = (event) => {
@@ -125,9 +123,21 @@ function App() {
     <div className="App">
       <Flex direction="column">
         <Stack direction="column" spacing={12} w="80%" margin="0 auto">
-          <Heading as="h1" size="3xl" textAlign="left" textTransform="uppercase" letterSpacing={4}>
-            Genre Detector
-          </Heading>
+          <Flex direction="row" justifyContent="space-between" alignItems="baseline">
+            <Heading as="h1" size="3xl" textAlign="left" textTransform="uppercase" letterSpacing={4}>
+              Genre Detector
+            </Heading>
+            <Text fontSize="xl" fontWeight="semibold">
+              Please support Friends To The End with your{" "}
+              <Link
+                textColor="blue.400"
+                _hover={{ textColor: "blue.300", textDecoration: "underline" }}
+                href="https://open.spotify.com/artist/7iSfLI1iAcghpThO7zwHjC?si=-XOa-mTmTI6JKQpz9tHwaw&nd=1"
+              >
+                follow on Spotify.
+              </Link>
+            </Text>
+          </Flex>
 
           <form onSubmit={handleSubmit}>
             <Flex direction="row">
