@@ -15,6 +15,7 @@ export function TrackTable({ items, loading }) {
             <Th>Name</Th>
             <Th>Album</Th>
             <Th>Artist(s)</Th>
+            <Th>Release Date</Th>
             <Th>Popularity</Th>
           </Tr>
         </Thead>
@@ -29,6 +30,7 @@ export function TrackTable({ items, loading }) {
             <Th>Name</Th>
             <Th>Album</Th>
             <Th>Artist(s)</Th>
+            <Th>Released</Th>
             <Th>Popularity</Th>
           </Tr>
         </Thead>
@@ -44,11 +46,12 @@ export function TrackTable({ items, loading }) {
                 <Td>
                 
                   {item.album.name}
-                  
+    
                 </Td>
-                
+              
                 
                 <Td>{item.artists}</Td>
+                <Td>{item.album.release_date}</Td>
                 <Td isNumeric>{item.popularity}</Td>
               </Tr>
             );

@@ -12,6 +12,7 @@ import {
   Text,
   Tooltip,
   Link,
+  Divider
 } from "@chakra-ui/react";
 import axios from "axios";
 import qs from "qs";
@@ -106,10 +107,13 @@ function App() {
           return (
             {
               name: track.name,
-              album: track.album,
+              album: {
+                name: track.album.name,
+                release_date: new Date(track.album.release_date).toLocaleDateString("en-US")
+              },
               href: track.external_urls.spotify,
               artists: track.artists.map(artist => artist.name).join(", "),
-              popularity: track.popularity
+              popularity: track.popularity,
             }
           )
         }))
@@ -150,12 +154,13 @@ function App() {
   return (
     <div className="App">
       <Flex direction="column">
-        <Stack direction="column" spacing={12} w="80%" margin="0 auto">
-          <Flex direction="row" justifyContent="space-between" alignItems="baseline">
-            <Heading as="h1" size="3xl" textAlign="left" textTransform="uppercase" letterSpacing={4}>
+        <Stack direction="column" spacing={12} w="90%" margin="0 auto">
+          
+            <Flex direction={["column", "column", "column", "row"]} justifyContent={["center", "center", "space-between", "space-between" ]} alignItems={["center", "center", "center", "baseline"]}flexWrap={["wrap", "wrap", "nowrap", "nowrap"]} >
+            <Heading as="h1" fontSize={["xl","2xl","3xl","5xl"]} textAlign={["center","center","left","left"]} textTransform="uppercase" letterSpacing={3}>
               Genre Detector
             </Heading>
-            <Text fontSize="xl" fontWeight="semibold">
+            <Text fontSize={["sm","md","md","xl"]} fontWeight="semibold">
               Please support Friends To The End with your{" "}
               <Link
                 textColor="blue.400"
@@ -165,13 +170,15 @@ function App() {
                 follow on Spotify.
               </Link>
             </Text>
-          </Flex>
-
+            </Flex>
+            
+         
+          <Divider style={{"marginTop": "1rem"}} />
           <form onSubmit={handleSubmit}>
-            <Flex direction="row">
+            <Flex direction={["column", "column", "row", "row"]} alignItems={["normal", "normal", "center", "center"]} justifyContent={["center"]}>
               {type === "genre" ? (
-                 <Flex direction="row" mr={2} justifyContent="space-between" alignItems="center">
-                 <Select variant="filled" width="8rem"  onChange={handleChange} mr={2} >
+                 <Flex direction="row" mr={2} justifyContent={["flex-start","flex-start","space-between","space-between"]} mb={[2, 2, 0, 0]} alignItems="center">
+                 <Select variant="filled" width="8rem"  onChange={handleChange} mr={2}  >
                    <option value="genre">Genre</option>
                    <option value="artist">Artist</option>
                    <option value="artist_id">Artist (ID)</option>
@@ -186,7 +193,7 @@ function App() {
                   </Tooltip>
               </Flex>
               ) : (
-                <Flex direction="row" mr={2} justifyContent="space-between" alignItems="center">
+                <Flex direction="row" mr={0} justifyContent="space-between" alignItems="center" mb={[2, 2, 0, 0]}>
                  <Select variant="filled" width="8rem"  onChange={handleChange} mr={2} >
                    <option value="genre">Genre</option>
                    <option value="artist">Artist</option>
@@ -209,7 +216,7 @@ function App() {
                   alignItems="flex-start"
                   pr="8rem"
                 />
-                <InputRightElement width="7rem">
+                <InputRightElement width={["6rem","6rem","7rem","7rem"]} visibility={["hidden", "hidden", "visible", "visible"]}>
                   <Stack width="100%" direction="row">
                     <Button type="submit" colorScheme={"green"} size="sm">
                       Search
@@ -227,6 +234,9 @@ function App() {
                   </Stack>
                 </InputRightElement>
               </InputGroup>
+              <Button type="submit" colorScheme={"green"} size="md" width={["8rem", "8rem", "0rem", "0rem"]} mt={2} visibility={["visible", "visible", "hidden", "hidden"]}>
+                  Search
+                </Button>
             </Flex>
           </form>
           {displayType === "track" || displayType === "track_id" ? (
