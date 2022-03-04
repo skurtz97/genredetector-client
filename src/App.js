@@ -24,18 +24,33 @@ import { TrackTable } from "./TrackTable";
 function App() {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("genre");
+  const [exact, setExact] = useState(true)
   const [displayType, setDisplayType] = useState("genre");
   const [loading, setLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const csvLink = useRef();
 
   const handleChange = (event) => {
-    if (event.target.type === "select-one") {
-      setType(event.target.value);
-      if (searchResults.length === 0) {
-        setDisplayType(event.target.value);
+
+    const value = event.target.value;
+    const type = event.target.type;
+
+    if (type === "select-one") {
+      if (value === "genre" || value === "artist" || value === "artist_id" || value ===  "track" || value === "track_id"){
+        setType(event.target.value);
+        console.log("type: " + type)
+        if (searchResults.length === 0) {
+          setDisplayType(event.target.value);
+        }
       }
-    } else if (event.target.type === "text") {
+      else if (event.target.value === "exact"){
+        setExact(true)
+      }
+      else if (event.target.value === "all"){
+        setExact(false)
+      }
+    } 
+    else if (type === "text") {
       setQuery(event.target.value);
     }
   };
@@ -62,21 +77,20 @@ function App() {
     setLoading(true);
 
     try {
-      let query_str = "";
       let id = "";
       let results = [];
+      let searchQuery = query.replace(/  +/g, " ").trim()
       if (type === "genre") {
-        console.log("GENRE");
-        query_str = qs.stringify({ genre: query });
-        results = await axios.get(`https://api.genredetector.com/genre?${query_str}`);
-        console.log(results.data);
+        if (exact){
+          results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/genre?q=${searchQuery}`);
+        }
+        else {
+          results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/genre?q=${searchQuery}&partial=true`)
+        }
+        
       } else if (type === "artist") {
-        console.log("ARTIST");
-        query_str = qs.stringify({ name: query });
-        results = await axios.get(`https://api.genredetector.com/artists?${query_str}`);
-        console.log(results.data);
+        results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/artist?q=${searchQuery}`);
       } else if (type === "artist_id") {
-        console.log(query);
         if (query.includes("https://open.spotify.com/artist/")) {
           id = query.replace("https://open.spotify.com/artist/", "");
         } else if (query.indexOf(":") !== -1) {
@@ -85,13 +99,23 @@ function App() {
           id = query;
         }
 
-        results = await axios.get(`https://api.genredetector.com/artist/${id}`);
+        results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/artist/${id}`);
       } else if (type === "track") {
-        console.log("TRACK");
-        query_str = qs.stringify({ name: query });
-        results = await axios.get(`https://api.genredetector.com/tracks?${query_str}`);
-        console.log(results.data);
-      } else if (type === "track_id") {
+        results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/track?q=${searchQuery}`);
+        results.data = results.data.map(((track) => {
+          return (
+            {
+              name: track.name,
+              album: track.album,
+              href: track.external_urls.spotify,
+              artists: track.artists.map(artist => artist.name).join(", "),
+              popularity: track.popularity
+            }
+          )
+        }))
+        console.log(results.data)
+      } 
+       else if (type === "track_id") {
         console.log("TRACK ID");
         if (query.includes("https://open.spotify.com/track/")) {
           id = query.replace("https://open.spotify.com/track/", "");
@@ -104,10 +128,14 @@ function App() {
         }
 
         console.log(id);
-        results = await axios.get(`https://api.genredetector.com/track/${id}`);
+        results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/track/${id}`);
       }
       setDisplayType(type);
-      setSearchResults(results.data);
+      if (type === "artist_id"){
+        setSearchResults([results.data])
+      } else {
+        setSearchResults(results.data);
+      }
       setLoading(false);
     } catch (error) {
       console.log(`Error: ${error}`);
@@ -141,14 +169,37 @@ function App() {
 
           <form onSubmit={handleSubmit}>
             <Flex direction="row">
-              <Select variant="filled" width="11rem" mr={2} onChange={handleChange}>
-                <option value="genre">Genre</option>
-                <option value="artist">Artist</option>
-                <option value="artist_id">Artist (ID)</option>
-                <option value="track">Track</option>
-                <option value="track_id">Track (ID)</option>
-              </Select>
-
+              {type === "genre" ? (
+                 <Flex direction="row" mr={2} justifyContent="space-between" alignItems="center">
+                 <Select variant="filled" width="8rem"  onChange={handleChange} mr={2} >
+                   <option value="genre">Genre</option>
+                   <option value="artist">Artist</option>
+                   <option value="artist_id">Artist (ID)</option>
+                   <option value="track">Track</option>
+                   <option value="track_id">Track (ID)</option>
+                 </Select>
+                 <Tooltip label={(exact ? "Include only exact matches" : "Include all matches")}>
+                    <Select variant="filled" width="6rem" onChange={handleChange}>
+                        <option value="exact">Exact</option>
+                        <option value="all">Partial</option>
+                    </Select>
+                  </Tooltip>
+              </Flex>
+              ) : (
+                <Flex direction="row" mr={2} justifyContent="space-between" alignItems="center">
+                 <Select variant="filled" width="8rem"  onChange={handleChange} mr={2} >
+                   <option value="genre">Genre</option>
+                   <option value="artist">Artist</option>
+                   <option value="artist_id">Artist (ID)</option>
+                   <option value="track">Track</option>
+                   <option value="track_id">Track (ID)</option>
+                 </Select>
+                
+              </Flex>
+              )}
+             
+              
+             
               <InputGroup size="md">
                 <Input
                   type="text"

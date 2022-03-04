@@ -37,12 +37,12 @@ export function ArtistTable({ items, loading }) {
             return (
               <Tr key={index}>
                 <Td>
-                  <Link href={item.url} _hover={{ color: "green.400" }}>
+                  <Link href={item.external_urls.spotify} _hover={{ color: "green.400" }} target="_blank">
                     {item.name}
                   </Link>
                 </Td>
                 <Td isNumeric>{item.popularity}</Td>
-                <Td isNumeric>{item.followers.toLocaleString()}</Td>
+                <Td isNumeric>{item.followers.total.toLocaleString()}</Td>
                 <Td>{item.genres.join(", ")}</Td>
               </Tr>
             );

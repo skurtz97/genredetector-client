@@ -37,11 +37,17 @@ export function TrackTable({ items, loading }) {
             return (
               <Tr key={index}>
                 <Td>
-                  <Link href={item.url} _hover={{ color: "green.400" }}>
+                  <Link href={item.href} _hover={{ color: "green.400" }} target="_blank">
                     {item.name}
                   </Link>
                 </Td>
-                <Td>{item.album}</Td>
+                <Td>
+                
+                  {item.album.name}
+                  
+                </Td>
+                
+                
                 <Td>{item.artists}</Td>
                 <Td isNumeric>{item.popularity}</Td>
               </Tr>
