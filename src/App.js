@@ -15,12 +15,21 @@ import {
   Divider
 } from "@chakra-ui/react";
 import axios from "axios";
-import qs from "qs";
 import { useRef, useState } from "react";
 import { CSVLink } from "react-csv";
 import "./App.css";
 import { ArtistTable } from "./ArtistTable";
 import { TrackTable } from "./TrackTable";
+
+
+const DEV_URL = "http://localhost:8080"
+const PROD_URL = "https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com"
+let BASE_URL = ""
+if (process.env.NODE_ENV === "development"){
+  BASE_URL = DEV_URL
+} else {
+  BASE_URL = PROD_URL
+}
 
 function App() {
   const [query, setQuery] = useState("");
@@ -39,7 +48,6 @@ function App() {
     if (type === "select-one") {
       if (value === "genre" || value === "artist" || value === "artist_id" || value ===  "track" || value === "track_id"){
         setType(event.target.value);
-        console.log("type: " + type)
         if (searchResults.length === 0) {
           setDisplayType(event.target.value);
         }
@@ -76,6 +84,7 @@ function App() {
   const handleSubmit = async (event) => {
     event.preventDefault(); // Stop default reloading behavior.
     setLoading(true);
+    
 
     try {
       let id = "";
@@ -83,14 +92,14 @@ function App() {
       let searchQuery = query.replace(/  +/g, " ").trim()
       if (type === "genre") {
         if (exact){
-          results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/genre?q=${searchQuery}`);
+          results = await axios.get(`${BASE_URL}/search/genre?q=${searchQuery}`);
         }
         else {
-          results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/genre?q=${searchQuery}&partial=true`)
+          results = await axios.get(`${BASE_URL}/search/genre?q=${searchQuery}&partial=true`)
         }
         
       } else if (type === "artist") {
-        results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/artist?q=${searchQuery}`);
+        results = await axios.get(`${BASE_URL}/search/artist?q=${searchQuery}`);
       } else if (type === "artist_id") {
         if (query.includes("https://open.spotify.com/artist/")) {
           id = query.replace("https://open.spotify.com/artist/", "");
@@ -100,9 +109,9 @@ function App() {
           id = query;
         }
 
-        results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/artist/${id}`);
+        results = await axios.get(`${BASE_URL}/search/artist/${id}`);
       } else if (type === "track") {
-        results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/track?q=${searchQuery}`);
+        results = await axios.get(`${BASE_URL}/search/track?q=${searchQuery}`);
         results.data = results.data.map(((track) => {
           return (
             {
@@ -117,10 +126,8 @@ function App() {
             }
           )
         }))
-        console.log(results.data)
       } 
        else if (type === "track_id") {
-        console.log("TRACK ID");
         if (query.includes("https://open.spotify.com/track/")) {
           id = query.replace("https://open.spotify.com/track/", "");
         }
@@ -130,9 +137,7 @@ function App() {
         } else {
           id = query;
         }
-
-        console.log(id);
-        results = await axios.get(`https://go-backend-dot-genre-detector-backend-340610.uc.r.appspot.com/search/track/${id}`);
+        results = await axios.get(`${BASE_URL}/search/track/${id}`);
       }
       setDisplayType(type);
       if (type === "artist_id"){
@@ -142,9 +147,7 @@ function App() {
       }
       setLoading(false);
     } catch (error) {
-      console.log(`Error: ${error}`);
       setLoading(false);
-      console.log(searchResults);
     }
   };
 
