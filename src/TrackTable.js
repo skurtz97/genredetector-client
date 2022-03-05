@@ -7,7 +7,7 @@ export function TrackTable({ items, loading }) {
         <Spinner size="xl" />
       </Center>
     );
-  } else if (!loading && items.length === 0) {
+  } else if ((!loading && items.length === 0) || (!loading && !items) || (!loading && items[0].artists === null)){
     return (
       <Table variant="striped" size="sm">
         <Thead>
@@ -39,7 +39,7 @@ export function TrackTable({ items, loading }) {
             return (
               <Tr key={index}>
                 <Td>
-                  <Link href={item.href} _hover={{ color: "green.400" }} target="_blank">
+                  <Link href={item.external_urls.spotify} _hover={{ color: "green.400" }} target="_blank">
                     {item.name}
                   </Link>
                 </Td>
@@ -50,7 +50,7 @@ export function TrackTable({ items, loading }) {
                 </Td>
               
                 
-                <Td>{item.artists}</Td>
+                <Td>{item.artists.map(artist => artist.name).join(", ")}</Td>
                 <Td>{item.album.release_date}</Td>
                 <Td isNumeric>{item.popularity}</Td>
               </Tr>

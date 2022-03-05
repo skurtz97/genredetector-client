@@ -43,9 +43,8 @@ function App() {
   const handleChange = (event) => {
 
     const value = event.target.value;
-    const type = event.target.type;
 
-    if (type === "select-one") {
+    if (event.target.type === "select-one") {
       if (value === "genre" || value === "artist" || value === "artist_id" || value ===  "track" || value === "track_id"){
         setType(event.target.value);
         if (searchResults.length === 0) {
@@ -59,7 +58,7 @@ function App() {
         setExact(false)
       }
     } 
-    else if (type === "text") {
+    else if (event.target.type === "text") {
       setQuery(event.target.value);
     }
   };
@@ -130,20 +129,21 @@ function App() {
        else if (type === "track_id") {
         if (query.includes("https://open.spotify.com/track/")) {
           id = query.replace("https://open.spotify.com/track/", "");
-        }
-        const index = query.lastIndexOf(":");
-        if (index !== -1) {
-          id = query.substring(query.lastIndexOf(":") + 1); // get rest of string starting from last occurrence of :
+        } else if (query.indexOf(":") !== -1) {
+          id = query.substring(query.lastIndexOf(":") + 1);
         } else {
           id = query;
         }
+
         results = await axios.get(`${BASE_URL}/search/track/${id}`);
       }
       setDisplayType(type);
-      if (type === "artist_id"){
+      if (type === "artist_id" || type === "track_id"){
         setSearchResults([results.data])
+        console.log([results.data])
       } else {
         setSearchResults(results.data);
+        console.log(results.data)
       }
       setLoading(false);
     } catch (error) {

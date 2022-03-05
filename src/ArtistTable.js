@@ -7,7 +7,7 @@ export function ArtistTable({ items, loading }) {
         <Spinner size="xl" />
       </Center>
     );
-  } else if (!loading && items.length === 0) {
+  } else if ((!loading && items.length === 0) || (!loading && !items) || (!loading && items[0].genres === null)) {
     return (
       <Table variant="striped" size="sm">
         <Thead>
@@ -43,7 +43,7 @@ export function ArtistTable({ items, loading }) {
                 </Td>
                 <Td isNumeric>{item.popularity}</Td>
                 <Td isNumeric>{item.followers.total.toLocaleString()}</Td>
-                <Td>{item.genres.join(", ")}</Td>
+                <Td>{item.genres !== null ? item.genres.join(", ") : ""}</Td>
               </Tr>
             );
           })}
