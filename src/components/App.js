@@ -17,7 +17,7 @@ import {
 import axios from "axios";
 import { useRef, useState } from "react";
 import { CSVLink } from "react-csv";
-import "./App.css";
+import "../styles/App.css";
 import { ArtistTable } from "./ArtistTable";
 import { TrackTable } from "./TrackTable";
 
