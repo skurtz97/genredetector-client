@@ -1,7 +1,26 @@
+import { useState } from "react";
+import { Container, ContainerProps, Search, SearchKind } from "../components";
+import { Header } from "../components";
+
+function Index() {
+    const [query, setQuery] = useState("");
+    const [kind, setKind] = useState(SearchKind.Genre);
 
 
-function Index(){
-    return<div>Welcome to Genre Detector</div>
+    const handleChange = () => {
+
+    }
+    return (
+
+        <>
+
+            <Search query={query} kind={kind} />
+
+
+        </>
+
+
+    )
 }
 
 export default Index;
