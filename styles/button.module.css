@@ -1,0 +1,18 @@
+.button {
+    background-color: var(--green-300);
+    border: 0px solid transparent;
+    border-radius: 0.375rem;
+    height: 2.5rem;
+    outline: transparent solid 2px;
+    padding-inline-start: 1rem;
+    padding-inline-end: 1rem;
+    min-width: 2.5rem;
+    max-width: 8rem;
+    font-weight: 600;
+    font-size:16px;
+    color: var(--gray-800);
+}
+
+.button:hover{
+    background-color: var(--green-200);
+}

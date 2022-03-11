@@ -1,0 +1,25 @@
+.select {
+    padding-inline-end: 2rem;
+    padding-inline-start: 1rem;
+    outline: transparent solid 2px;
+    background: var(--gray-700);
+    color: inherit;
+    border-radius: 0.375rem;
+    border: 2px solid transparent;
+    height: 2.5rem;
+    font-size:16px;
+    min-width:2.5rem;
+    max-width: 8rem;
+}
+
+.select:hover{
+    background-color: var(--gray-600);
+}
+.select:focus {
+    border-color: var(--blue-300);
+    background-color: var(--gray-600);
+}
+.option {
+    background-color: var(--gray-600);
+    border: 0px solid #ffffff29;
+}
