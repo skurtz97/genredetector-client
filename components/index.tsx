@@ -2,10 +2,6 @@
 export {Layout} from "./layout";
 export type {LayoutProps} from "./layout";
 
-// Container
-export {Container} from "./container";
-export type {ContainerProps} from "./container";
-
 // Header
 export {Header} from "./header";
 
