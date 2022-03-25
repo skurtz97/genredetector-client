@@ -1,18 +1,22 @@
 // Layout
-export {Layout} from "./layout";
-export type {LayoutProps} from "./layout";
+export { Layout } from "./layout";
+export type { LayoutProps } from "./layout";
 
 // Header
-export {Header} from "./header";
+export { Header } from "./header";
 
 
 // Input
-export {Input} from "./input";
+export { Input } from "./input";
 
 // Option
-export {Select} from "./select"
-export type {Option, SelectProps} from "./select";
+export { Select } from "./select"
+export type { Option, SelectProps } from "./select";
 
 // Button
-export {Button} from "./button";
-export type {ButtonProps} from "./button";
+export { Button } from "./button";
+export type { ButtonProps } from "./button";
+
+// Table
+export { Table } from "./table";
+export type { TableProps } from "./table";
