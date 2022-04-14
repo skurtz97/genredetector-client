@@ -244,7 +244,7 @@ function App() {
                     <option value="track_id">Track (ID)</option>
                   </Select>
                   <Tooltip label={(exact ? "Include only exact matches" : "Include all matches")}>
-                    <Select variant="filled" width="6rem" onChange={handleChange}>
+                    <Select variant="filled" width="8rem" onChange={handleChange} >
                       <option value="exact">Exact</option>
                       <option value="all">Partial</option>
                     </Select>
@@ -272,7 +272,7 @@ function App() {
                   alignItems="flex-start"
                   pr="8rem"
                 />
-                <InputRightElement width={["6rem", "6rem", "7rem", "7rem"]} visibility={["hidden", "hidden", "visible", "visible"]}>
+                <InputRightElement width={["6rem", "6rem", "7rem", "7rem"]} visibility={["hidden", "hidden", "visible", "visible"]} mr="0.5rem">
                   <Stack width="100%" direction="row">
                     <Button type="submit" colorScheme={"green"} size="sm">
                       Search
