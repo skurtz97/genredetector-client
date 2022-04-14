@@ -42,7 +42,7 @@ export function ArtistTable({ items, loading }) {
                   </Link>
                 </Td>
                 <Td isNumeric>{item.popularity}</Td>
-                <Td isNumeric>{item.followers.total.toLocaleString()}</Td>
+                <Td isNumeric>{item.followers.toLocaleString()}</Td>
                 <Td>{item.genres !== null ? item.genres.join(", ") : ""}</Td>
               </Tr>
             );

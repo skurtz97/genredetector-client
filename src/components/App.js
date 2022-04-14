@@ -31,6 +31,18 @@ if (process.env.NODE_ENV === "development") {
   BASE_URL = PROD_URL
 }
 
+
+function artistSimplify(artist) {
+  return {
+    name: artist.name,
+    id: artist.id,
+    genres: artist.genres,
+    followers: artist.followers.total,
+    popularity: artist.popularity,
+    external_urls: artist.external_urls.spotify
+  };
+}
+
 function App() {
   const [query, setQuery] = useState("");
   const [type, setType] = useState("genre");
@@ -96,12 +108,14 @@ function App() {
         if (exact) {
           const requestedAt = performance.now();
           results = await axios.get(`${BASE_URL}/search/genre?q=${searchQuery}`);
+          results.data.items = results.data.items.map((artist) => artistSimplify(artist));
           const receivedAt = performance.now();
           setElapsed(receivedAt - requestedAt);
         }
         else {
           const requestedAt = performance.now()
           results = await axios.get(`${BASE_URL}/search/genre?q=${searchQuery}&partial=true`)
+          results.data.items = results.data.items.map((artist) => artistSimplify(artist));
           const receivedAt = performance.now();
           setElapsed(receivedAt - requestedAt);
         }
@@ -109,6 +123,7 @@ function App() {
       } else if (type === "artist") {
         const requestedAt = performance.now();
         results = await axios.get(`${BASE_URL}/search/artist?q=${searchQuery}`);
+        results.data.items = results.data.items.map((artist) => artistSimplify(artist));
         const receivedAt = performance.now();
         setElapsed(receivedAt - requestedAt);
       } else if (type === "artist_id") {
@@ -121,6 +136,7 @@ function App() {
         }
         const requestedAt = performance.now();
         results = await axios.get(`${BASE_URL}/search/artist/${id}`);
+        results.data.followers = results.data.followers.total;
         const receivedAt = performance.now();
         setElapsed(receivedAt - requestedAt);
         results = {
