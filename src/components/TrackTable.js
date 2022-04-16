@@ -39,7 +39,7 @@ export function TrackTable({ items, loading }) {
             return (
               <Tr key={index}>
                 <Td>
-                  <Link href={item.external_urls} _hover={{ color: "green.400" }} target="_blank">
+                  <Link href={item.external_urls} _hover={{ color: "green.400" }} target={item.external_urls}>
                     {item.name}
                   </Link>
                 </Td>
