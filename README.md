@@ -1,3 +1,3 @@
 # genredetector-client
 
-This is a react frontend for my genredetector project. At the moment of this commit, this is the current front-end, although work is progressing on a Nextjs version.
+This is a react frontend for my genredetector project. This is the current front-end. Although work is being done on a NextJs version in the genredetector-next repository.
