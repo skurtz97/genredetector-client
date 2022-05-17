@@ -81,7 +81,7 @@ function App() {
   const placeholderText = (type) => {
     switch (type) {
       case "genre":
-        return "Enter a genre to search for";
+        return "Enter a genre to search for, ex: soft rock";
       case "artist":
         return "Enter an artist to search for";
       case "artist_id":
